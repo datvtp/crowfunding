@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { Input } from "components/input";
 import { Label } from "components/label";
@@ -9,12 +11,25 @@ import LayoutAuthentication from "layout/LayoutAuthentication";
 import { Button } from "components/button";
 import { Checkbox } from "components/checkbox";
 
+const schema = yup.object({
+  name: yup.string().required("Full name can't be blank."),
+  email: yup
+    .string()
+    .email("Email is invalid.")
+    .required("Email can't be blank."),
+  password: yup
+    .string()
+    .required("Password can't be blank.")
+    .min(8, "Password must be more than 8 characters.")
+    .max(20, "Password must be less than 20 characters."),
+});
+
 const SignUpPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { isValid },
-  } = useForm({});
+    formState: { isValid, errors },
+  } = useForm({ resolver: yupResolver(schema), mode: "onSubmit" });
 
   const handleSignUp = (values) => {
     if (!isValid) return;
@@ -47,6 +62,7 @@ const SignUpPage = () => {
             name="name"
             type="text"
             placeholder="Full name"
+            error={errors.name?.message}
           />
         </FormGroup>
         <FormGroup>
@@ -56,6 +72,7 @@ const SignUpPage = () => {
             name="email"
             type="email"
             placeholder="example@gmail.com"
+            error={errors.email?.message}
           />
         </FormGroup>
         <FormGroup>
@@ -65,6 +82,7 @@ const SignUpPage = () => {
             name="password"
             type="password"
             placeholder="Create a password"
+            error={errors.password?.message}
           />
         </FormGroup>
         <div className="flex items-start mb-5 gap-x-5">
