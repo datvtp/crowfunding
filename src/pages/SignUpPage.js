@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Input } from "components/input";
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { FormGroup } from "components/common";
 import LayoutAuthentication from "layout/LayoutAuthentication";
 import { Button } from "components/button";
+import { Checkbox } from "components/checkbox";
 
 const SignUpPage = () => {
   const {
@@ -20,6 +21,8 @@ const SignUpPage = () => {
 
     console.log(values);
   };
+
+  const [isTermAccepted, setIsTermAccepted] = useState(false);
 
   return (
     <LayoutAuthentication heading="Sign Up">
@@ -65,13 +68,18 @@ const SignUpPage = () => {
           />
         </FormGroup>
         <div className="flex items-start mb-5 gap-x-5">
-          <span className="inline-block w-5 h-5 border rounded border-text4"></span>
-          <span className="flex-1 text-sm text-text2">
-            I agree to the{" "}
-            <span className="underline text-secondary">Terms of Use</span> and
-            have read and understand the{" "}
-            <span className="underline text-secondary">Privacy policy.</span>
-          </span>
+          <Checkbox
+            name="term"
+            isChecked={isTermAccepted}
+            onClick={() => setIsTermAccepted(!isTermAccepted)}
+          >
+            <span className="text-sm text-text2">
+              I agree to the{" "}
+              <span className="underline text-secondary">Terms of Use</span> and
+              have read and understand the{" "}
+              <span className="underline text-secondary">Privacy policy.</span>
+            </span>
+          </Checkbox>
         </div>
         <Button className="w-full bg-primary" type="submit">
           Create my account
