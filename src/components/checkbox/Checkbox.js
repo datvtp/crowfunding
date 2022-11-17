@@ -11,8 +11,10 @@ const Checkbox = ({
     <div className="flex items-start gap-x-5">
       <div
         className={`inline-flex items-center justify-center p-1 text-white w-5 h-5 border rounded cursor-pointer ${
-          isChecked ? "bg-primary border-primary" : "border-strock"
-        }`}
+          isChecked
+            ? "bg-primary border-primary"
+            : "border-strock dark:border-text3"
+        } select-none`}
         onClick={onClick}
       >
         <input
