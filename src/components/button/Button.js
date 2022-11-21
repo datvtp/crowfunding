@@ -14,7 +14,7 @@ const Button = ({
 
   return (
     <button
-      className={`flex items-center justify-center py-4 text-base font-semibold rounded-xl text-white min-h-[56px] ${
+      className={`flex items-center justify-center p-4 text-base font-semibold rounded-xl text-white min-h-[56px] ${
         isLoading ? "opacity-50 pointer-events-none" : ""
       } ${className}`}
       type={type}
