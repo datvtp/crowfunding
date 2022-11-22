@@ -6,3 +6,4 @@ export { default as IconPayment } from "./IconPayment";
 export { default as IconProfile } from "./IconProfile";
 export { default as IconWithdraw } from "./IconWithdraw";
 export { default as IconDarkmode } from "./IconDarkmode";
+export { default as IconFolder } from "./IconFolder";
