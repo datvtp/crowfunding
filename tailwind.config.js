@@ -27,6 +27,10 @@ module.exports = {
         text4: "#B2B3BD",
         error: "#EB5757",
       },
+      boxShadow: {
+        "15%": "10px 10px 20px rgba(218, 213, 213, 0.15)",
+        "25%": "10px 10px 20px rgba(211, 211, 211, 0.25)",
+      },
     },
   },
   plugins: [],
