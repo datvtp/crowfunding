@@ -8,8 +8,8 @@ const CampaignCategory = ({ categoryName, isSmall = true }) => {
     <Link
       to="/"
       className={`${
-        isSmall ? "text-xs" : "text-sm"
-      } flex items-center mb-3 font-medium gap-x-3 text-text3`}
+        isSmall ? "text-xs mb-3" : "text-sm mb-4"
+      } flex items-center font-medium gap-x-3 text-text3`}
     >
       <IconFolder />
       <span>{categoryName}</span>

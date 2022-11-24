@@ -4,7 +4,7 @@ import { defaultImg } from "constants/global";
 
 const CampaignBanner = ({ banner = defaultImg, isSmall = true }) => {
   return (
-    <div className={`${isSmall ? "h-[158px]" : "h-[266px]"}`}>
+    <div className={`${isSmall ? "h-[158px]" : "h-[266px] flex-1"}`}>
       <img
         src={banner}
         alt="campaign-img"
