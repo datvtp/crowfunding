@@ -11,14 +11,12 @@ import Gap from "components/common/Gap";
 const DashboardPage = () => {
   return (
     <LayoutDashboard>
-      <Heading className="mb-5" number={4}>
-        Your campaigns
-      </Heading>
+      <Heading number={4}>Your campaigns</Heading>
       <CampaignFeature />
 
       <Gap />
 
-      <Heading className="mb-5">Popular campaigns</Heading>
+      <Heading>Popular campaigns</Heading>
       <CampaignGrid>
         {Array(4)
           .fill(0)
@@ -29,7 +27,7 @@ const DashboardPage = () => {
 
       <Gap />
 
-      <Heading className="mb-5">Recent campaigns</Heading>
+      <Heading>Recent campaigns</Heading>
       <CampaignGrid>
         {Array(4)
           .fill(0)

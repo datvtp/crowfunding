@@ -63,6 +63,7 @@ const DashboardSidebar = () => {
               ? "bg-primary bg-opacity-20 flex items-center gap-x-5 md:w-12 md:h-12 md:justify-center md:rounded-xl md:mb-7 last:mt-auto last:bg-white last:shadow-25% text-primary"
               : "flex items-center gap-x-5 md:w-12 md:h-12 md:justify-center md:rounded-xl md:mb-7 last:mt-auto last:bg-white last:shadow-25% text-text3"
           }
+          end={link.url === "/"}
         >
           <span>{link.icon}</span>
           <span className="md:hidden">{link.title}</span>
