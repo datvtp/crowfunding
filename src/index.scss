@@ -13,3 +13,31 @@
     @apply outline-none;
   }
 }
+
+.quill {
+  @apply border border-strock rounded-xl;
+
+  padding: 15px 25px;
+  text-align: center;
+
+  .ql-toolbar.ql-snow {
+    border: none;
+    background: none;
+    display: inline-block;
+    @apply bg-text4 bg-opacity-10 rounded-xl py-3 px-5;
+  }
+
+  .ql-container.ql-snow,
+  .ql-editor {
+    @apply border-none font-primary text-sm;
+  }
+
+  .ql-editor {
+    @apply pt-10;
+  }
+
+  .ql-editor.ql-blank::before {
+    font-style: normal;
+    @apply text-sm not-italic text-text4 font-medium;
+  }
+}
