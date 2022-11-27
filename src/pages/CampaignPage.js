@@ -1,7 +1,6 @@
 import React from "react";
 
 import Heading from "components/common/Heading";
-import LayoutDashboard from "layout/LayoutDashboard";
 import CampaignGrid from "modules/campaign/CampaignGrid";
 import CampaignFeature from "modules/campaign/CampaignFeature";
 import { Button } from "components/button";
@@ -9,7 +8,7 @@ import Gap from "components/common/Gap";
 
 const CampaignPage = () => {
   return (
-    <LayoutDashboard>
+    <>
       <div className="flex items-center justify-between px-10 py-8 mb-10 bg-white rounded-3xl shadow-15%">
         <div className="flex items-start gap-x-6">
           <div className="flex items-center justify-center text-white rounded-full w-14 h-14 bg-secondary bg-opacity-60">
@@ -68,7 +67,7 @@ const CampaignPage = () => {
           <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
         </svg>
       </Button>
-    </LayoutDashboard>
+    </>
   );
 };
 
