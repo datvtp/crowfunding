@@ -12,6 +12,7 @@ const Input = ({
   error = "",
   placeholder = "",
   children,
+  className = "",
   ...props
 }) => {
   const { field } = useController({ control, name, defaultValue: "" });
@@ -28,7 +29,7 @@ const Input = ({
           error.length > 0
             ? "border-error"
             : "border-strock dark:border-darkStrockColor"
-        } ${children ? "pr-16" : ""}`}
+        } ${children ? "pr-16" : ""} ${className}`}
       />
       <span
         className={`absolute right-6 ${

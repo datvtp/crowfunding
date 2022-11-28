@@ -12,6 +12,7 @@ module.exports = {
         white: "#FFFFFF",
         whiteSoft: "#FCFBFF",
         graySoft: "#FCFCFC",
+        grayf3: "#F7F7F7",
         strock: "#F1F1F3",
         lite: "#FCFCFD",
         darkBg: "#13131A",
@@ -29,6 +30,8 @@ module.exports = {
       },
       boxShadow: {
         "15%": "10px 10px 20px rgba(218, 213, 213, 0.15)",
+        "20%":
+          "-4px 4px 8px rgba(226, 226, 226, 0.2), 4px 4px 8px rgba(226, 226, 226, 0.2)",
         "25%": "10px 10px 20px rgba(211, 211, 211, 0.25)",
       },
     },
