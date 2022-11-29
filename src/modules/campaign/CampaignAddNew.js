@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageUploader from "quill-image-uploader";
 import DatePicker from "react-date-picker";
+import { toast } from "react-toastify";
 
 import { FormGroup } from "components/common";
 import FormRow from "components/common/FormRow";
@@ -12,11 +13,18 @@ import { Input, Textarea } from "components/input";
 import { Dropdown } from "components/dropdown";
 import axios from "axios";
 import { Button } from "components/button";
+import useOnChange from "hooks/useOnChange";
 
 Quill.register("modules/imageUploader", ImageUploader);
 
+const categoriesData = ["architecture", "education"];
+
 const CampaignAddNew = () => {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, setValue, watch } = useForm();
+  const getDropdownLabel = (name, defaultValue = "") => {
+    const value = watch(name) || defaultValue;
+    return value;
+  };
   const [content, setContent] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -52,6 +60,27 @@ const CampaignAddNew = () => {
     []
   );
 
+  const [countries, setCountries] = useState([]);
+  const [filterCountry, setFilterCountry] = useOnChange(500);
+  useEffect(() => {
+    async function fetchCountries() {
+      if (!filterCountry) return;
+      try {
+        const response = await axios.get(
+          `https://restcountries.com/v3.1/name/${filterCountry}`
+        );
+        setCountries(response.data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    fetchCountries();
+  }, [filterCountry]);
+
+  const handleSelectDropdownOption = (name, value) => {
+    setValue(name, value);
+  };
+
   return (
     <div className="bg-white rounded-xl py-10 px-[66px] shadow-15%">
       <div className="text-center">
@@ -74,11 +103,21 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Select a category *</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select category"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={getDropdownLabel("category", "Select category")}
+              ></Dropdown.Select>
 
               <Dropdown.List>
-                <Dropdown.Option>Architecture</Dropdown.Option>
-                <Dropdown.Option>Engineer</Dropdown.Option>
+                {categoriesData.map((category) => (
+                  <Dropdown.Option
+                    key={category}
+                    onClick={() =>
+                      handleSelectDropdownOption("category", category)
+                    }
+                  >
+                    <span className="capitalize">{category}</span>
+                  </Dropdown.Option>
+                ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
@@ -159,15 +198,28 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Country</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select country"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={getDropdownLabel("country", "Select country")}
+              ></Dropdown.Select>
               <Dropdown.List>
                 <Dropdown.Search
                   placeholder="Search country..."
-                  onChange={null}
+                  onChange={setFilterCountry}
                 ></Dropdown.Search>
-                <Dropdown.Option>USA</Dropdown.Option>
-                <Dropdown.Option>England</Dropdown.Option>
-                <Dropdown.Option>Vietnam</Dropdown.Option>
+                {countries.length > 0 &&
+                  countries.map((country) => (
+                    <Dropdown.Option
+                      key={country?.name?.common}
+                      onClick={() =>
+                        handleSelectDropdownOption(
+                          "country",
+                          country?.name?.common
+                        )
+                      }
+                    >
+                      {country?.name?.common}
+                    </Dropdown.Option>
+                  ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
