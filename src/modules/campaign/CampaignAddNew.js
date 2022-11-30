@@ -15,6 +15,7 @@ import { Input, Textarea } from "components/input";
 import { Dropdown } from "components/dropdown";
 import { Button } from "components/button";
 import useOnChange from "hooks/useOnChange";
+import ImageUpload from "components/image/ImageUpload";
 
 Quill.register("modules/imageUploader", ImageUploader);
 
@@ -153,14 +154,24 @@ const CampaignAddNew = () => {
           </FormGroup>
         </FormRow>
 
-        <FormGroup>
-          <Label>Short description *</Label>
-          <Textarea
-            name="short-description"
-            placeholder="Write a short description...."
-            control={control}
-          ></Textarea>
-        </FormGroup>
+        <FormRow>
+          <FormGroup>
+            <Label>Short description *</Label>
+            <Textarea
+              name="short-description"
+              placeholder="Write a short description...."
+              control={control}
+            ></Textarea>
+          </FormGroup>
+          <FormGroup>
+            <Label>Featured Image</Label>
+            <ImageUpload
+              onChange={setValue}
+              name="featured_image"
+            ></ImageUpload>
+          </FormGroup>
+          <FormGroup></FormGroup>
+        </FormRow>
 
         <FormGroup>
           <Label>Story *</Label>

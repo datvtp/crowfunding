@@ -16,7 +16,7 @@ input:focus + .error-input {
   display: none;
 }
 .quill {
-  @apply border border-strock rounded-xl;
+  @apply border border-strock rounded-xl min-h-[300px];
   padding: 15px 25px;
   .ql-toolbar.ql-snow {
     border: none;
