@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill, { Quill } from "react-quill";
@@ -6,62 +7,90 @@ import ImageUploader from "quill-image-uploader";
 import DatePicker from "react-date-picker";
 import { toast } from "react-toastify";
 
+import { apiURL, imgbbAPI } from "config/config";
 import { FormGroup } from "components/common";
 import FormRow from "components/common/FormRow";
 import { Label } from "components/label";
 import { Input, Textarea } from "components/input";
 import { Dropdown } from "components/dropdown";
-import axios from "axios";
 import { Button } from "components/button";
 import useOnChange from "hooks/useOnChange";
 
 Quill.register("modules/imageUploader", ImageUploader);
 
 const categoriesData = ["architecture", "education"];
+const campaignEndMethodsData = ["money", "issue"];
 
 const CampaignAddNew = () => {
-  const { handleSubmit, control, setValue, watch } = useForm();
+  const { handleSubmit, control, setValue, watch, reset } = useForm();
+  const [content, setContent] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [countries, setCountries] = useState([]);
+  const [filterCountry, setFilterCountry] = useOnChange(500);
+
   const getDropdownLabel = (name, defaultValue = "") => {
     const value = watch(name) || defaultValue;
     return value;
   };
-  const [content, setContent] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
 
-  const handleAddNewCampaign = (values) => {};
+  const resetValues = () => {
+    setStartDate("");
+    setEndDate("");
+    setContent("");
+    setStartDate(new Date());
+    setEndDate(new Date());
+    reset({});
+  };
+
+  const handleSelectDropdownOption = (name, value) => {
+    setValue(name, value);
+  };
+
+  const handleAddNewCampaign = async (values) => {
+    try {
+      await axios.post(`${apiURL}/campaigns`, {
+        ...values,
+        content,
+        startDate,
+        endDate,
+      });
+      toast.success("Create campaign successfully");
+      resetValues();
+    } catch (error) {
+      toast.error("Can not create new campaign");
+    }
+  };
 
   const modules = useMemo(
     () => ({
       toolbar: [
         ["bold", "italic", "underline", "strike"],
         ["blockquote"],
-        [{ header: 1 }, { header: 2 }],
+        [{ header: 1 }, { header: 2 }], // custom button values
         [{ list: "ordered" }, { list: "bullet" }],
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
         ["link", "image"],
       ],
       imageUploader: {
         upload: async (file) => {
-          // const bodyFormData = new FormData();
-          // bodyFormData.append("image", file);
-          // const res = await axios({
-          //   method: "post",
-          //   url: "https://api.imgbb.com/1/upload?key=07fec499b5f9276351aaf7d19a88dbf8",
-          //   data: bodyFormData,
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //   },
-          // });
-          // return res.data.data.url;
+          const bodyFormData = new FormData();
+          bodyFormData.append("image", file);
+          const response = await axios({
+            method: "post",
+            url: imgbbAPI,
+            data: bodyFormData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          return response.data.data.url;
         },
       },
     }),
     []
   );
 
-  const [countries, setCountries] = useState([]);
-  const [filterCountry, setFilterCountry] = useOnChange(500);
   useEffect(() => {
     async function fetchCountries() {
       if (!filterCountry) return;
@@ -76,10 +105,6 @@ const CampaignAddNew = () => {
     }
     fetchCountries();
   }, [filterCountry]);
-
-  const handleSelectDropdownOption = (name, value) => {
-    setValue(name, value);
-  };
 
   return (
     <div className="bg-white rounded-xl py-10 px-[66px] shadow-15%">
@@ -188,10 +213,20 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Campaign End Method</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select one"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={getDropdownLabel("endMethod", "Select one")}
+              ></Dropdown.Select>
               <Dropdown.List>
-                <Dropdown.Option>Busy</Dropdown.Option>
-                <Dropdown.Option>Test</Dropdown.Option>
+                {campaignEndMethodsData.map((endMethod) => (
+                  <Dropdown.Option
+                    key={endMethod}
+                    onClick={() =>
+                      handleSelectDropdownOption("endMethod", endMethod)
+                    }
+                  >
+                    <span className="capitalize">{endMethod}</span>
+                  </Dropdown.Option>
+                ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
@@ -246,7 +281,7 @@ const CampaignAddNew = () => {
         </FormRow>
         <div className="mt-10 text-center">
           <Button type="submit" className="px-10 mx-auto text-white bg-primary">
-            Submit new campaign{" "}
+            Submit new campaign
           </Button>
         </div>
       </form>

@@ -22,6 +22,7 @@ const Input = ({
       <input
         id={name}
         type={type}
+        spellCheck={false}
         placeholder={error.length > 0 ? "" : placeholder}
         {...field}
         {...props}
