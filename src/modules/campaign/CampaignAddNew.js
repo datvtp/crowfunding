@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -28,6 +28,7 @@ const CampaignAddNew = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [countries, setCountries] = useState([]);
   const [filterCountry, setFilterCountry] = useOnChange(500);
+  const quillRef = useRef(null);
 
   const getDropdownLabel = (name, defaultValue = "") => {
     const value = watch(name) || defaultValue;
@@ -106,6 +107,10 @@ const CampaignAddNew = () => {
     fetchCountries();
   }, [filterCountry]);
 
+  useEffect(() => {
+    quillRef.current?.editor.root.setAttribute("spellcheck", "false");
+  }, []);
+
   return (
     <div className="bg-white rounded-xl py-10 px-[66px] shadow-15%">
       <div className="text-center">
@@ -160,6 +165,7 @@ const CampaignAddNew = () => {
         <FormGroup>
           <Label>Story *</Label>
           <ReactQuill
+            ref={quillRef}
             placeholder="Write your story...... "
             modules={modules}
             theme="snow"
