@@ -1,9 +1,14 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { authRefreshToken, authUpdateUser } from "./store/auth/auth-slice";
+import { getToken, logOut } from "utils/auth";
+import { permissions } from "constants/permissions";
 import LayoutDashboard from "layout/LayoutDashboard";
 import LayoutPayment from "layout/LayoutPayment";
+import RequiredAuthPage from "pages/RequiredAuthPage";
 
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
@@ -19,13 +24,46 @@ Modal.setAppElement("#root");
 Modal.defaultStyles = {};
 
 function App() {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (user && user.id) {
+      const { access_token } = getToken();
+      dispatch(
+        authUpdateUser({
+          user: user,
+          accessToken: access_token,
+        })
+      );
+    } else {
+      const { refresh_token } = getToken();
+      if (refresh_token) {
+        dispatch(authRefreshToken(refresh_token));
+      } else {
+        dispatch(authUpdateUser({}));
+        logOut();
+      }
+    }
+  }, [dispatch, user]);
+
   return (
     <Suspense>
       <Routes>
         <Route element={<LayoutDashboard></LayoutDashboard>}>
           <Route path="/" element={<DashboardPage />}></Route>
           <Route path="/campaign" element={<CampaignPage />}></Route>
-          <Route path="/start-campaign" element={<StartCampaignPage />}></Route>
+          <Route
+            element={
+              <RequiredAuthPage
+                allowPermissions={[permissions.campaign.CREATE_CAMPAIGN]}
+              ></RequiredAuthPage>
+            }
+          >
+            <Route
+              path="/start-campaign"
+              element={<StartCampaignPage />}
+            ></Route>
+          </Route>
           <Route path="/campaign/:slug" element={<CampaignViewPage />}></Route>
           <Route path="/payment" element={<PaymentPage></PaymentPage>}></Route>
         </Route>
@@ -39,8 +77,8 @@ function App() {
             element={<ShippingPage></ShippingPage>}
           ></Route>
         </Route>
-        <Route path="/sign-up" element={<SignUpPage />}></Route>
-        <Route path="/sign-in" element={<SignInPage />}></Route>
+        <Route path="/register" element={<SignUpPage />}></Route>
+        <Route path="/login" element={<SignInPage />}></Route>
       </Routes>
     </Suspense>
   );

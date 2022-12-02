@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import useToggleValue from "hooks/useToggleValue";
+import { useDispatch } from "react-redux";
 
 import { Button, ButtonGoogle } from "components/button";
 import LayoutAuthentication from "../layout/LayoutAuthentication";
@@ -10,7 +12,7 @@ import { FormGroup } from "components/common";
 import { Label } from "components/label";
 import { Input } from "components/input";
 import { IconEyeToggle } from "components/icons";
-import useToggleValue from "hooks/useToggleValue";
+import { authLogin } from "store/auth/auth-slice";
 
 const schema = yup.object({
   email: yup
@@ -28,16 +30,15 @@ const SignInPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { isValid, errors },
+    formState: { errors },
   } = useForm({ resolver: yupResolver(schema), mode: "onSubmit" });
 
   const { value: showPassword, handleToggleValue: handleTogglePassword } =
     useToggleValue(false);
 
+  const dispatch = useDispatch();
   const handleSignIn = (values) => {
-    if (!isValid) return;
-
-    console.log(values);
+    dispatch(authLogin(values));
   };
 
   return (

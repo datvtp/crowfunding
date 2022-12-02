@@ -1,17 +1,18 @@
-import useToggleValue from "hooks/useToggleValue";
+import { useDispatch } from "react-redux";
 import React from "react";
-import LayoutAuthentication from "layout/LayoutAuthentication";
-import FormGroup from "components/common/FormGroup";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+
+import FormGroup from "components/common/FormGroup";
+import LayoutAuthentication from "layout/LayoutAuthentication";
+import useToggleValue from "hooks/useToggleValue";
 import { Label } from "components/label";
 import { Input } from "components/input";
 import { IconEyeToggle } from "components/icons";
 import { Checkbox } from "components/checkbox";
 import { Button, ButtonGoogle } from "components/button";
-import { useDispatch } from "react-redux";
 import { authRegister } from "store/auth/auth-slice";
 
 const schema = yup.object({
@@ -32,14 +33,13 @@ const SignUpPage = () => {
     handleSubmit,
     control,
     reset,
-    formState: { isValid, errors },
+    formState: { errors },
   } = useForm({ resolver: yupResolver(schema), mode: "onSubmit" });
 
   const dispatch = useDispatch();
 
   const handleSignUp = async (values) => {
     try {
-      if (!isValid) return;
       dispatch(authRegister({ ...values, permissions: [] }));
       reset({});
     } catch (error) {
