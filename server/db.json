@@ -1,5 +1,22 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": 1,
+      "name": "dat",
+      "password": "$2a$10$GjymOl/aMmZyF3n9fFOTKeWs7b7wafL5Ovco9O7npDlWgzRJFu1Ky",
+      "email": "dat@gmail.com",
+      "refreshToken": null,
+      "permissions": []
+    },
+    {
+      "id": 2,
+      "name": "hue",
+      "password": "$2a$10$wrY7U.tqcw4CT0qpGrAthO.ZmRE3Y9MWPVXjpQCp.CiiAe1sn2z0y",
+      "email": "hue@gmail.com",
+      "refreshToken": null,
+      "permissions": []
+    }
+  ],
   "categories": [],
   "campaigns": [
     {

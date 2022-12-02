@@ -1,17 +1,18 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-import { Input } from "components/input";
-import { Label } from "components/label";
-import { Link } from "react-router-dom";
-import { FormGroup } from "components/common";
-import LayoutAuthentication from "layout/LayoutAuthentication";
-import { Button, ButtonGoogle } from "components/button";
-import { Checkbox } from "components/checkbox";
-import { IconEyeToggle } from "components/icons";
 import useToggleValue from "hooks/useToggleValue";
+import React from "react";
+import LayoutAuthentication from "layout/LayoutAuthentication";
+import FormGroup from "components/common/FormGroup";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { Label } from "components/label";
+import { Input } from "components/input";
+import { IconEyeToggle } from "components/icons";
+import { Checkbox } from "components/checkbox";
+import { Button, ButtonGoogle } from "components/button";
+import { useDispatch } from "react-redux";
+import { authRegister } from "store/auth/auth-slice";
 
 const schema = yup.object({
   name: yup.string().required("Full name can't be blank."),
@@ -30,13 +31,20 @@ const SignUpPage = () => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: { isValid, errors },
   } = useForm({ resolver: yupResolver(schema), mode: "onSubmit" });
 
-  const handleSignUp = (values) => {
-    if (!isValid) return;
+  const dispatch = useDispatch();
 
-    console.log(values);
+  const handleSignUp = async (values) => {
+    try {
+      if (!isValid) return;
+      dispatch(authRegister({ ...values, permissions: [] }));
+      reset({});
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const { value: isTermAccepted, handleToggleValue: handleToggleTerm } =
